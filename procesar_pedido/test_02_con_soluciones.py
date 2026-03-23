@@ -33,7 +33,7 @@ class InMemoryPaymentFake:
 # ============= SOLUCIONES A CADA ERROR =============
 
 def test_sol_1_dummy_evita_attributeerror_logger():
-    logger = DummyLogger()           # ✅ Dummy resuelve logger None
+    logger = DummyLogger()           # Dummy resuelve logger None
     payment = StubPayment()          # (todavía no importa)
     emailer = MagicMock()            # mock placeholder
     status = process_order("a@b.com", 50, logger, payment, emailer)
@@ -41,7 +41,7 @@ def test_sol_1_dummy_evita_attributeerror_logger():
 
 def test_sol_2_stub_evita_red_y_controla_estado():
     logger = DummyLogger()
-    payment = StubPayment()          # ✅ Stub evita Timeout y decide output
+    payment = StubPayment()          # Stub evita Timeout y decide output
     emailer = MagicMock()
     assert process_order("a@b.com", 150, logger, payment, emailer) == "APPROVED"
     assert process_order("a@b.com", 250, logger, payment, emailer) == "REJECTED"
@@ -49,7 +49,7 @@ def test_sol_2_stub_evita_red_y_controla_estado():
 def test_sol_3_mock_evita_envio_real_y_verifica_interaccion():
     logger = DummyLogger()
     payment = StubPayment()
-    emailer = MagicMock()            # ✅ Mock evita efectos reales y permite asserts
+    emailer = MagicMock()            # Mock evita efectos reales y permite asserts
     process_order("a@b.com", 100, logger, payment, emailer)
     emailer.send.assert_called_once()                         # verificación de comportamiento
     emailer.send.assert_called_with("a@b.com", subject="Thanks", body="Order approved")
@@ -57,13 +57,13 @@ def test_sol_3_mock_evita_envio_real_y_verifica_interaccion():
 def test_sol_4_spy_inspecciona_argumentos():
     logger = DummyLogger()
     payment = StubPayment()
-    emailer = EmailSpy()             # ✅ Spy registra llamadas y argumentos
+    emailer = EmailSpy()             # Spy registra llamadas y argumentos
     process_order("destino@x.com", 80, logger, payment, emailer)
     assert emailer.sent == [("destino@x.com", "Thanks", "Order approved")]
 
 def test_sol_5_faker_datos_realistas_para_variedad():
     try:
-        from faker import Faker      # ✅ Faker genera datos realistas
+        from faker import Faker      # Faker genera datos realistas
     except Exception:
         pytest.skip("Instala Faker para ejecutar esta prueba: pip install Faker")
     fake = Faker()
@@ -81,7 +81,7 @@ def test_sol_5_faker_datos_realistas_para_variedad():
 
 def test_bonus_fake_con_estado():
     logger = DummyLogger()
-    payment = InMemoryPaymentFake(balance=200)  # ✅ Fake modela estado entre llamadas
+    payment = InMemoryPaymentFake(balance=200)  # Fake modela estado entre llamadas
     emailer = MagicMock()
     assert process_order("x@y.com", 150, logger, payment, emailer) == "APPROVED"
     assert process_order("x@y.com", 150, logger, payment, emailer) == "REJECTED"  # se consumió el "saldo"
