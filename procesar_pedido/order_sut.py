@@ -1,4 +1,5 @@
 # order_sut.py
+# SUT (System Under Test)
 def process_order(email, amount, logger, payment, emailer):
     """
     Lógica sencilla:
@@ -12,3 +13,4 @@ def process_order(email, amount, logger, payment, emailer):
     if status == "APPROVED":
         emailer.send(email, subject="Thanks", body="Order approved")
     return status
+    
